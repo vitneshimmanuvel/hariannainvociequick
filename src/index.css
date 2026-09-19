@@ -1,0 +1,488 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+:root {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: dark;
+  background-color: #0b0f19;
+  color: #f1f5f9;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #0b0f19;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(71, 85, 105, 0.6);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.8);
+}
+
+/* Editor Input styles */
+.input-field {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background-color: #030712;
+  border: 1px solid #1f2937;
+  border-radius: 0.5rem;
+  font-size: 0.8125rem;
+  color: #f3f4f6;
+  transition: all 0.15s ease-in-out;
+}
+.input-field:focus {
+  outline: none;
+  border-color: #dc2626;
+  box-shadow: 0 0 0 1px #dc2626;
+}
+
+/* ------------------------------------------------------------- */
+/* EXACT A4 INVOICE SHEET (MATCHING IMAGE 1 TARGET PROPORTIONS)  */
+/* ------------------------------------------------------------- */
+
+.invoice-document-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px 12px;
+  background: #0f172a;
+  min-height: 100%;
+}
+
+/* Exact A4 Dimensions: 210mm x 297mm */
+.invoice-sheet {
+  width: 210mm;
+  height: 297mm;
+  max-width: 100%;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 8mm 10mm;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.15);
+  box-sizing: border-box;
+  position: relative;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Solid 2.5px Black Framing Border with Natural Flow */
+.invoice-inner-border {
+  border: 2.5px solid #000000;
+  padding: 16px 20px 20px 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-sizing: border-box;
+}
+
+/* 1. Header with Top Row, Centered Title and Full Divider */
+.header-section-wrapper {
+  margin-bottom: 8px;
+}
+
+.header-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.payana-brand-logo {
+  width: 58px;
+  height: 46px;
+  object-fit: contain;
+  display: block;
+}
+
+.payana-brand-name {
+  color: #D81E00;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  margin: 0;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+.invoice-title-row {
+  display: flex;
+  justify-content: center;
+}
+
+.invoice-main-title {
+  font-size: 19px;
+  font-weight: 700;
+  color: #000000;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  margin: 0;
+}
+
+/* Full Width Header Divider */
+.header-bottom-divider {
+  height: 2px;
+  background-color: #000000;
+  width: 100%;
+  margin-top: 6px;
+}
+
+/* 2. Top Meta Row: Invoice # & Date */
+.invoice-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0 12px 0;
+  font-size: 13.5px;
+  color: #000000;
+  font-family: Arial, sans-serif;
+}
+
+/* 3. Section Titles */
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #000000;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  margin-bottom: 8px;
+  letter-spacing: 0.3px;
+  font-family: Arial, sans-serif;
+}
+
+/* Client Information Grid */
+.client-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 14px;
+  padding-left: 1px;
+  font-family: Arial, sans-serif;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #000000;
+}
+
+.info-label {
+  width: 195px;
+  font-weight: 400;
+  color: #000000;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.info-colon {
+  width: 22px;
+  font-weight: 400;
+  color: #000000;
+  flex-shrink: 0;
+}
+
+.info-value {
+  font-weight: 400;
+  color: #000000;
+  text-transform: uppercase;
+}
+
+/* 4. Payment Table with Blue Gradient Styling */
+.payment-section {
+  margin-bottom: 4px;
+}
+
+.payment-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4px 0 8px 0;
+  font-size: 13px;
+  border: 2px solid #2C5282;
+  border-radius: 6px;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+.payment-table th {
+  background: linear-gradient(135deg, #2C5282 0%, #3182CE 100%);
+  color: #ffffff;
+  font-weight: 700;
+  padding: 6.5px 12px;
+  text-align: left;
+  border: 1px solid #4A90E2;
+}
+
+.payment-table th.th-amount {
+  text-align: left;
+  width: 36%;
+}
+
+.payment-table td {
+  padding: 6px 12px;
+  border: 1px solid #4A90E2;
+  color: #000000;
+  font-weight: 400;
+}
+
+.payment-table .tr-even {
+  background-color: #F7FAFC;
+}
+
+.payment-table .tr-odd {
+  background-color: #EDF2F7;
+}
+
+/* Total & Remaining Amount Highlight Rows */
+.payment-table .total-row {
+  background: linear-gradient(135deg, #1A365D 0%, #2C5282 100%) !important;
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+.payment-table .total-row td {
+  color: #ffffff !important;
+  border-color: #1A365D !important;
+  font-weight: 700;
+}
+
+/* Disclaimer Box (Exact to Image 1) */
+.disclaimer-box {
+  border: 2px solid #000000;
+  background-color: #F9F9F9;
+  padding: 7px 12px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 400;
+  margin-top: 8px;
+  margin-bottom: 22px;
+  color: #000000;
+  font-family: Arial, sans-serif;
+}
+
+/* 5. Footer Section: Bank Details (Left) + Multi-Pill Company Card (Right) */
+.footer-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  font-family: Arial, sans-serif;
+}
+
+/* Left: Bank Details & Large Signature */
+.left-footer {
+  max-width: 48%;
+  display: flex;
+  flex-direction: column;
+}
+
+.bank-details {
+  font-size: 12px;
+  line-height: 1.45;
+  color: #000000;
+}
+
+.bank-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  margin-bottom: 5px;
+  color: #000000;
+}
+
+.bank-info {
+  margin-bottom: 2px;
+  color: #000000;
+  font-weight: 400;
+}
+
+.signature-section {
+  margin-top: 14px;
+}
+
+.signature-text {
+  font-size: 13px;
+  font-weight: 400;
+  color: #000000;
+  margin-bottom: 2px;
+}
+
+.signature-img-container {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  margin: 2px 0;
+}
+
+.signature-img {
+  height: 42px;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+  display: block;
+}
+
+.signature-line {
+  width: 140px;
+  height: 1px;
+  background-color: #000000;
+  margin-top: 24px;
+}
+
+.company-text {
+  font-size: 12px;
+  font-weight: 400;
+  color: #000000;
+  margin-top: 2px;
+}
+
+/* Right: Red Bordered Multi-Pill Company Details Card */
+.right-footer {
+  max-width: 48%;
+  width: 285px;
+  margin-left: auto;
+}
+
+.company-details {
+  background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+  border: 2px solid #D81E00;
+  border-radius: 12px;
+  padding: 12px 14px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(216, 30, 0, 0.08);
+}
+
+.company-details:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #D81E00 0%, #FF4444 50%, #D81E00 100%);
+}
+
+.company-title {
+  color: #D81E00;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #D81E00;
+  padding-bottom: 5px;
+  margin-bottom: 8px;
+}
+
+.company-info {
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.95);
+  font-size: 11.5px;
+  font-weight: 400;
+  color: #000000;
+}
+
+.info-phone {
+  border-left: 3.5px solid #0284C7;
+}
+
+.info-mail {
+  border-left: 3.5px solid #EA580C;
+}
+
+.info-globe {
+  border-left: 3.5px solid #0D9488;
+}
+
+.info-location {
+  border-left: 3.5px solid #DC2626;
+}
+
+.company-icon {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------- */
+/* PRINT MEDIA STYLING (FOR NATIVE PDF & A4 PRINTING)            */
+/* ------------------------------------------------------------- */
+
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .app-header,
+  .editor-panel,
+  .no-print,
+  .fixed,
+  button,
+  .modal-backdrop {
+    display: none !important;
+  }
+
+  .invoice-document-wrapper {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+  }
+
+  .invoice-sheet {
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    height: 100vh !important;
+    padding: 8mm 10mm !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .invoice-inner-border {
+    height: calc(100vh - 16mm) !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+}
