@@ -85,7 +85,7 @@ export function App() {
     if (!element) return;
 
     setIsGeneratingPdf(true);
-    const clientNameSanitized = (invoice.client.givenName || 'Client').replace(/[^a-zA-Z0-9]/g, '_');
+    const clientNameSanitized = (invoice.client?.fullName || invoice.client?.givenName || 'Client').replace(/[^a-zA-Z0-9]/g, '_');
     const invoiceNumSanitized = (invoice.invoiceNumber || 'PO').replace(/[^a-zA-Z0-9]/g, '_');
     const filename = `Invoice_${invoiceNumSanitized}_${clientNameSanitized}.pdf`;
 

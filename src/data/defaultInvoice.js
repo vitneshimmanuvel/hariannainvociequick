@@ -8,6 +8,7 @@ export const DEFAULT_INVOICE = {
   
   // Client Info
   client: {
+    fullName: 'MOHAMED SHAFIQ',
     givenName: 'MOHAMED SHAFIQ',
     dob: '10-05-2004',
     contactNumber: '9080906300',
@@ -19,6 +20,7 @@ export const DEFAULT_INVOICE = {
 
   // Payment Details
   payment: {
+    applicationFee: 50000,
     serviceFee: 50000,
     taxRate: 0,
     taxAmount: 0.00,
@@ -63,6 +65,7 @@ export const BLANK_INVOICE = {
   currency: '₹',
   
   client: {
+    fullName: '',
     givenName: '',
     dob: '',
     contactNumber: '',
@@ -73,6 +76,7 @@ export const BLANK_INVOICE = {
   },
 
   payment: {
+    applicationFee: 0,
     serviceFee: 0,
     taxRate: 0,
     taxAmount: 0,

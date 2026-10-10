@@ -1,6 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 
-const NEON_CONNECTION_STRING = 'postgresql://neondb_owner:npg_9laqX6xPpViR@ep-spring-surf-b43gzqzu-pooler.c-6.us-east-2.aws.neon.tech/neondb?sslmode=require';
+const NEON_CONNECTION_STRING = import.meta.env?.VITE_NEON_DATABASE_URL || 'postgresql://neondb_owner:npg_9laqX6xPpViR@ep-spring-surf-b43gzqzu-pooler.c-6.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require';
 
 let sql = null;
 
@@ -44,7 +44,7 @@ export async function saveInvoiceToNeon(invoiceData) {
     const id = invoiceData.id || `inv_${Date.now()}`;
     const invoiceNumber = invoiceData.invoiceNumber || 'PO-0000000';
     const invoiceDate = invoiceData.invoiceDate || new Date().toISOString().split('T')[0];
-    const clientName = invoiceData.client?.givenName || 'Unnamed Client';
+    const clientName = invoiceData.client?.fullName || invoiceData.client?.givenName || 'Unnamed Client';
     const fullData = { ...invoiceData, id };
 
     await client`

@@ -167,7 +167,7 @@ export function SavedInvoicesModal({ isOpen, onClose, onLoadInvoice }) {
                         </span>
                       </div>
                       <div className="text-sm font-semibold text-slate-200 mt-1 truncate">
-                        {inv.client_name || 'No Client Name'}
+                        {inv.client_name || invData?.client?.fullName || invData?.client?.givenName || 'No Client Name'}
                       </div>
                       <div className="text-xs text-slate-400 mt-0.5">
                         {invData?.client?.serviceOffered ? `${invData.client.serviceOffered} • ` : ''}
@@ -180,7 +180,7 @@ export function SavedInvoicesModal({ isOpen, onClose, onLoadInvoice }) {
                     <div className="text-right">
                       <div className="text-xs text-slate-400">Total Amount</div>
                       <div className="text-base font-bold text-emerald-400 font-mono">
-                        {currency} {Number(total).toLocaleString('en-IN')}
+                        {currency} {Number(total).toLocaleString(currency === '₹' ? 'en-IN' : 'en-US')}
                       </div>
                     </div>
 

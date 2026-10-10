@@ -10,9 +10,22 @@ import {
   PenTool, 
   HelpCircle,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Coins,
+  DollarSign
 } from 'lucide-react';
 import { DEFAULT_INVOICE, BLANK_INVOICE } from '../data/defaultInvoice';
+
+export const CURRENCY_OPTIONS = [
+  { symbol: '₹' },
+  { symbol: '$' },
+  { symbol: '€' },
+  { symbol: '£' },
+  { symbol: 'AED' },
+  { symbol: 'C$' },
+  { symbol: 'A$' },
+  { symbol: '¥' },
+];
 
 export function InvoiceEditor({ invoice, onChange, onOpenSignatureModal }) {
   const [activeSection, setActiveSection] = useState('all'); // 'all', 'client', 'payment', 'bank', 'company'
@@ -26,9 +39,23 @@ export function InvoiceEditor({ invoice, onChange, onOpenSignatureModal }) {
     }
     current[keys[keys.length - 1]] = value;
 
+    // Keep fullName & givenName in sync
+    if (path === 'client.fullName') {
+      updated.client.givenName = value;
+    } else if (path === 'client.givenName') {
+      updated.client.fullName = value;
+    }
+
+    // Keep applicationFee & serviceFee in sync
+    if (path === 'payment.applicationFee') {
+      updated.payment.serviceFee = value;
+    } else if (path === 'payment.serviceFee') {
+      updated.payment.applicationFee = value;
+    }
+
     // Handle auto calculation if enabled
     if (path.startsWith('payment.') && updated.payment.autoCalculate) {
-      const fee = Number(updated.payment.serviceFee) || 0;
+      const fee = Number(updated.payment.applicationFee ?? updated.payment.serviceFee) || 0;
       const rate = Number(updated.payment.taxRate) || 0;
       const taxAmt = (fee * rate) / 100;
       const total = fee + taxAmt;
@@ -47,7 +74,7 @@ export function InvoiceEditor({ invoice, onChange, onOpenSignatureModal }) {
   const handleAutoCalcToggle = (checked) => {
     const updated = { ...invoice, payment: { ...invoice.payment, autoCalculate: checked } };
     if (checked) {
-      const fee = Number(updated.payment.serviceFee) || 0;
+      const fee = Number(updated.payment.applicationFee ?? updated.payment.serviceFee) || 0;
       const rate = Number(updated.payment.taxRate) || 0;
       const taxAmt = (fee * rate) / 100;
       const total = fee + taxAmt;
@@ -65,7 +92,7 @@ export function InvoiceEditor({ invoice, onChange, onOpenSignatureModal }) {
   return (
     <div className="editor-panel flex flex-col h-full bg-slate-900 border-r border-slate-800 text-slate-200">
       {/* Quick Templates Bar */}
-      <div className="p-4 border-b border-slate-800 bg-slate-950/70 flex flex-wrap items-center justify-between gap-2">
+      <div className="p-4 border-b border-slate-800 bg-slate-950/70 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <button
             type="button"
@@ -85,7 +112,38 @@ export function InvoiceEditor({ invoice, onChange, onOpenSignatureModal }) {
         </div>
 
         {/* Currency & Tax Calculation Selector */}
-        <div className="flex items-center gap-3 text-xs">
+        <div className="flex items-center gap-3 text-xs flex-wrap">
+          {/* Quick Currency Selector in Top Bar */}
+          <div className="flex items-center gap-1.5 bg-slate-800/90 border border-slate-700/80 rounded-lg px-2 py-1">
+            <Coins size={13} className="text-amber-400" />
+            <span className="text-slate-400 font-medium">Currency:</span>
+            <select
+              value={CURRENCY_OPTIONS.some(c => c.symbol === invoice.currency) ? invoice.currency : 'custom'}
+              onChange={(e) => {
+                if (e.target.value !== 'custom') {
+                  updateField('currency', e.target.value);
+                }
+              }}
+              className="bg-slate-900 text-slate-100 font-semibold rounded px-1.5 py-0.5 border border-slate-700 focus:outline-none focus:ring-1 focus:ring-red-500 cursor-pointer text-xs"
+            >
+              {CURRENCY_OPTIONS.map((c) => (
+                <option key={c.symbol} value={c.symbol}>
+                  {c.symbol}
+                </option>
+              ))}
+              <option value="custom">Custom...</option>
+            </select>
+            {!CURRENCY_OPTIONS.some(c => c.symbol === invoice.currency) && (
+              <input
+                type="text"
+                value={invoice.currency}
+                onChange={(e) => updateField('currency', e.target.value)}
+                placeholder="Symbol"
+                className="w-12 bg-slate-950 border border-slate-700 text-white rounded px-1.5 py-0.5 text-center font-mono text-xs focus:ring-1 focus:ring-red-500"
+              />
+            )}
+          </div>
+
           <label className="flex items-center gap-1.5 cursor-pointer text-slate-300 select-none">
             <input
               type="checkbox"
@@ -163,11 +221,11 @@ export function InvoiceEditor({ invoice, onChange, onOpenSignatureModal }) {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1">Given Name</label>
+              <label className="block text-xs font-medium text-slate-400 mb-1">Full Name</label>
               <input
                 type="text"
-                value={invoice.client.givenName}
-                onChange={(e) => updateField('client.givenName', e.target.value)}
+                value={invoice.client.fullName ?? invoice.client.givenName ?? ''}
+                onChange={(e) => updateField('client.fullName', e.target.value)}
                 placeholder="e.g. MOHAMED SHAFIQ"
                 className="input-field"
               />
@@ -248,16 +306,60 @@ export function InvoiceEditor({ invoice, onChange, onOpenSignatureModal }) {
             <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
               <CreditCard size={14} /> Payment Details
             </span>
-            <span className="text-[11px] text-slate-400">Currency: {invoice.currency}</span>
+            <span className="text-[11px] text-slate-400 font-mono">Active Symbol: {invoice.currency || '₹'}</span>
+          </div>
+
+          {/* Dedicated Currency Switcher Buttons */}
+          <div className="p-3 bg-slate-900/90 rounded-lg border border-slate-800 space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+                <Coins size={14} className="text-amber-400" /> Currency Symbol (Output):
+              </label>
+              <span className="text-[11px] text-emerald-400 font-mono font-bold bg-emerald-950/70 border border-emerald-800/60 px-2 py-0.5 rounded">
+                Current: {invoice.currency || '₹'}
+              </span>
+            </div>
+            
+            <div className="flex flex-wrap items-center gap-1.5">
+              {CURRENCY_OPTIONS.map((curr) => {
+                const isSelected = invoice.currency === curr.symbol;
+                return (
+                  <button
+                    key={curr.symbol}
+                    type="button"
+                    onClick={() => updateField('currency', curr.symbol)}
+                    className={`min-w-[34px] px-2.5 py-1 rounded-md text-xs font-semibold transition flex items-center justify-center ${
+                      isSelected
+                        ? 'bg-red-600 text-white shadow-sm ring-1 ring-red-400 font-bold'
+                        : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700/60'
+                    }`}
+                  >
+                    {curr.symbol}
+                  </button>
+                );
+              })}
+              
+              <div className="flex items-center gap-1.5 ml-auto">
+                <span className="text-[11px] text-slate-400">Custom:</span>
+                <input
+                  type="text"
+                  value={invoice.currency}
+                  onChange={(e) => updateField('currency', e.target.value)}
+                  placeholder="e.g. ₹ or $"
+                  className="w-16 px-2 py-1 bg-slate-950 border border-slate-700 rounded text-xs text-white text-center font-mono focus:outline-none focus:border-red-500"
+                  title="Type any custom currency symbol"
+                />
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1">Service Fee ({invoice.currency})</label>
+              <label className="block text-xs font-medium text-slate-400 mb-1">Application Fee ({invoice.currency})</label>
               <input
                 type="number"
-                value={invoice.payment.serviceFee}
-                onChange={(e) => updateField('payment.serviceFee', e.target.value)}
+                value={invoice.payment.applicationFee ?? invoice.payment.serviceFee ?? ''}
+                onChange={(e) => updateField('payment.applicationFee', e.target.value)}
                 className="input-field font-mono"
               />
             </div>

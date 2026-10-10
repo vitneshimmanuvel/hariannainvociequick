@@ -20,6 +20,11 @@ export const InvoiceDocument = forwardRef(function InvoiceDocument({ invoice }, 
     companyContact = {},
   } = invoice;
 
+  const getCurrencyHeader = (curr) => {
+    if (!curr) return 'Amount';
+    return `Amount (${curr})`;
+  };
+
   const formatAmount = (val) => {
     if (val === undefined || val === null || val === '') return '0';
     const num = Number(val);
@@ -65,9 +70,9 @@ export const InvoiceDocument = forwardRef(function InvoiceDocument({ invoice }, 
             <h3 className="section-title">CLIENT INFORMATION</h3>
             <div className="client-info-grid">
               <div className="info-row">
-                <span className="info-label">GIVEN NAME</span>
+                <span className="info-label">FULL NAME</span>
                 <span className="info-colon">:</span>
-                <span className="info-value">{client.givenName || 'MOHAMED SHAFIQ'}</span>
+                <span className="info-value">{client.fullName || client.givenName || 'MOHAMED SHAFIQ'}</span>
               </div>
               <div className="info-row">
                 <span className="info-label">DATE OF BIRTH</span>
@@ -105,13 +110,13 @@ export const InvoiceDocument = forwardRef(function InvoiceDocument({ invoice }, 
               <thead>
                 <tr>
                   <th className="th-desc">Description</th>
-                  <th className="th-amount">Amount (INR)</th>
+                  <th className="th-amount">{getCurrencyHeader(currency)}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr className="tr-even">
-                  <td>Service Fee</td>
-                  <td>{currency} {formatAmount(payment.serviceFee)}</td>
+                  <td>Application Fee</td>
+                  <td>{currency} {formatAmount(payment.applicationFee ?? payment.serviceFee)}</td>
                 </tr>
                 <tr className="tr-odd">
                   <td>Tax ({payment.taxRate || 0}%)</td>
